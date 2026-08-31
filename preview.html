@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Ranking Lab — Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Instrument+Serif&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#f8f7f4; --surface:#fff; --text:#1a1a2e; --muted:#5c5c72; --primary:#2d4a8a; --accent:#c45d3e; --border:#e2e0da; --highlight:#eef2f9; --max:1120px; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'DM Sans',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+    .container { width:min(100% - 2rem,var(--max)); margin:0 auto; }
+    header { position:sticky; top:0; z-index:10; background:rgba(248,247,244,.95); border-bottom:1px solid var(--border); backdrop-filter:blur(10px); }
+    .header-inner { display:flex; align-items:center; gap:1rem; min-height:72px; }
+    .logo { display:flex; align-items:center; gap:.6rem; text-decoration:none; color:inherit; }
+    .logo strong { display:block; font-size:1rem; }
+    .logo small { font-size:.68rem; color:var(--muted); }
+    nav ul { display:flex; gap:.25rem; list-style:none; flex-wrap:wrap; }
+    nav a { padding:.45rem .75rem; text-decoration:none; color:var(--muted); font-weight:600; font-size:.92rem; border-radius:8px; }
+    nav a:hover { color:var(--primary); background:var(--highlight); }
+    .header-actions { margin-left:auto; display:flex; align-items:center; gap:.75rem; }
+    .lang-switcher { display:flex; align-items:center; gap:.1rem; padding:.2rem; border:1px solid var(--border); border-radius:10px; background:var(--surface); }
+    .lang-btn { border:0; background:transparent; padding:.35rem .7rem; border-radius:7px; font:inherit; font-weight:600; font-size:.82rem; cursor:pointer; color:var(--muted); }
+    .lang-btn.active { background:var(--primary); color:#fff; }
+    .lang-divider { color:var(--border); font-size:.75rem; }
+    .btn { display:inline-block; padding:.7rem 1.2rem; border-radius:10px; font-weight:600; text-decoration:none; font-size:.92rem; }
+    .btn-primary { background:var(--primary); color:#fff; }
+    .hero { padding:4rem 0 3rem; background:linear-gradient(165deg,#eef2f9 0%,var(--bg) 55%,#faf5f2 100%); }
+    .hero h1 { font-family:'Instrument Serif',Georgia,serif; font-size:clamp(2rem,5vw,3rem); font-weight:400; line-height:1.15; margin:1rem 0; }
+    .hero h1 em { font-style:italic; color:var(--primary); }
+    .hero p { color:var(--muted); max-width:36rem; margin-bottom:1.5rem; }
+    .badge { display:inline-block; padding:.3rem .8rem; background:#f0e4df; color:var(--accent); border-radius:999px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; padding:3rem 0; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.5rem; }
+    .card h3 { margin-bottom:.5rem; }
+    .card p { color:var(--muted); font-size:.92rem; }
+    .notice { background:#fff8e6; border:1px solid #f0d78c; border-radius:12px; padding:1rem 1.25rem; margin:1.5rem 0 0; font-size:.9rem; }
+    .notice strong { color:#8a5a00; }
+    .hero-block { display:none; }
+    .hero-block.visible { display:block; }
+    .notice span { display:none; }
+    .notice span.visible { display:inline; }
+    .logo small { display:none; }
+    .logo small.visible { display:block; }
+    .card[data-lang] { display:none; }
+    .card[data-lang].visible { display:block; }
+    .header-actions a[data-lang], .header-actions a[data-lang].visible { display:inline-block; }
+    .header-actions a[data-lang] { display:none; }
+    .header-actions a[data-lang].visible { display:inline-block; }
+    nav li { display:none; }
+    nav li.visible { display:list-item; }
+    @media (max-width:768px) { nav { display:none; } .header-cta { display:none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <span style="font-size:1.4rem;color:var(--primary)">◈</span>
+        <span>
+          <strong>AI Ranking Lab</strong>
+          <small data-lang="en" class="visible">SEO &amp; GEO Advisory</small>
+          <small data-lang="zh">SEO與GEO顧問</small>
+        </span>
+      </a>
+      <nav>
+        <ul>
+          <li data-lang="en" class="visible"><a href="#">Home</a></li>
+          <li data-lang="en" class="visible"><a href="#">Services</a></li>
+          <li data-lang="en" class="visible"><a href="#">Insights</a></li>
+          <li data-lang="en" class="visible"><a href="#">Contact</a></li>
+          <li data-lang="zh"><a href="#">首頁</a></li>
+          <li data-lang="zh"><a href="#">服務</a></li>
+          <li data-lang="zh"><a href="#">專欄</a></li>
+          <li data-lang="zh"><a href="#">聯絡我們</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switcher" aria-label="Language">
+          <button type="button" class="lang-btn active" data-set-lang="en">English</button>
+          <span class="lang-divider">|</span>
+          <button type="button" class="lang-btn" data-set-lang="zh">中文</button>
+        </div>
+        <a href="#" class="btn btn-primary header-cta visible" data-lang="en">Get a Consultation</a>
+        <a href="#" class="btn btn-primary header-cta" data-lang="zh">預約諮詢</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div data-lang="en" class="visible hero-block">
+          <span class="badge">SEO &amp; GEO Advisory</span>
+          <h1>Get found in <em>search engines</em> and <em>AI platforms</em></h1>
+          <p>We help brands earn visibility on Google, ChatGPT, Perplexity, and AI Overviews. Hong Kong SEO &amp; GEO services.</p>
+          <a href="#" class="btn btn-primary">Explore Our Services</a>
+        </div>
+        <div data-lang="zh" class="hero-block">
+          <span class="badge">SEO與GEO顧問服務</span>
+          <h1>在<em>搜尋引擎</em>與<em>AI平台</em>中脫穎而出</h1>
+          <p>助品牌在 Google、ChatGPT、Perplexity 及 AI Overview 中獲得可見度。香港 SEO 服務與 GEO 優化。</p>
+          <a href="#" class="btn btn-primary">了解 SEO 服務</a>
+        </div>
+        <div class="notice">
+          <strong>Preview mode</strong> —
+          <span data-lang="en" class="visible">This page opens without a server. To see the full site at localhost:4321, double-click <code>start.bat</code> after installing Node.js.</span>
+          <span data-lang="zh">此頁面無需伺服器即可開啟。要查看完整網站，請安裝 Node.js 後雙擊 <code>start.bat</code>。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="container cards">
+      <article class="card" data-lang="en">
+        <h3>Traditional SEO</h3>
+        <p>Technical audits, on-page optimization, and link building for Google rankings.</p>
+      </article>
+      <article class="card" data-lang="en">
+        <h3>Generative Engine Optimization</h3>
+        <p>GEO strategies so AI models cite your brand in answers.</p>
+      </article>
+      <article class="card" data-lang="en">
+        <h3>AI Platform Ranking</h3>
+        <p>Visibility across ChatGPT, Perplexity, and Google AI Overviews.</p>
+      </article>
+      <article class="card" data-lang="zh">
+        <h3>傳統 SEO 優化</h3>
+        <p>技術審核、頁面優化及連結建設，提升 Google 排名。</p>
+      </article>
+      <article class="card" data-lang="zh">
+        <h3>生成式引擎優化 (GEO)</h3>
+        <p>GEO 策略，使 AI 模型在答案中引用您的品牌。</p>
+      </article>
+      <article class="card" data-lang="zh">
+        <h3>AI 平台排名</h3>
+        <p>在 ChatGPT、Perplexity 及 Google AI Overview 中提升可見度。</p>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    function setLang(lang) {
+      document.documentElement.lang = lang === 'zh' ? 'zh-HK' : 'en-HK';
+      document.querySelectorAll('[data-lang]').forEach((el) => {
+        el.classList.toggle('visible', el.getAttribute('data-lang') === lang);
+      });
+      document.querySelectorAll('.lang-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.getAttribute('data-set-lang') === lang);
+      });
+    }
+    document.querySelectorAll('[data-set-lang]').forEach((btn) => {
+      btn.addEventListener('click', () => setLang(btn.getAttribute('data-set-lang')));
+    });
+    setLang('en');
+  </script>
+</body>
+</html>

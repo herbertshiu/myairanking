@@ -1,0 +1,15 @@
+---
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale: _locale } = Astro.props;
+---
+
+<div class="lang-switcher" role="navigation" aria-label="Language">
+  <button type="button" class="lang-btn active" data-set-lang="en" aria-pressed="true">English</button>
+  <span class="lang-divider" aria-hidden="true">|</span>
+  <button type="button" class="lang-btn" data-set-lang="zh" aria-pressed="false">中文</button>
+</div>

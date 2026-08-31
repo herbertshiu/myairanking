@@ -1,0 +1,66 @@
+---
+import '../styles/global.css';
+import { SITE_META } from '../i18n/locales';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SEO from '../components/SEO.astro';
+import type { SEOProps } from '../lib/seo';
+import langToggle from '../scripts/lang-toggle.ts?url';
+import { resolveCanonical, resolveSiteOrigin } from '../lib/site-url';
+
+interface Props extends SEOProps {
+  breadcrumbs?: { label: string; href?: string }[];
+}
+
+const { breadcrumbs, ...seo } = Astro.props;
+const site = SITE_META.en;
+const siteOrigin = resolveSiteOrigin(Astro.site, Astro.url);
+const canonical = resolveCanonical(Astro.site, Astro.url);
+const fullTitle =
+  seo.title === site.name || seo.title === SITE_META.zh.name
+    ? seo.title
+    : `${seo.title} | ${site.name}`;
+---
+
+<!doctype html>
+<html lang="en-HK">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <SEO {...seo} title={fullTitle} locale="en" alternateUrl={`${siteOrigin}${Astro.url.pathname}?lang=zh`} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link lang-block is-visible" data-lang="en">Skip to main content</a>
+    <a href="#main-content" class="skip-link lang-block" data-lang="zh">跳至主要內容</a>
+    <Header />
+    {breadcrumbs && breadcrumbs.length > 0 && (
+      <nav class="breadcrumbs container" aria-label="Breadcrumb">
+        <ol>
+          {breadcrumbs.map((crumb) => (
+            <li>
+              {crumb.href ? (
+                <a href={crumb.href}>{crumb.label}</a>
+              ) : (
+                <span aria-current="page">{crumb.label}</span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <script type="module" src={langToggle}></script>
+  </body>
+</html>

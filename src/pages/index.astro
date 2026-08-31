@@ -1,0 +1,426 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_META } from '../i18n/locales';
+import { getCollection } from 'astro:content';
+import { getArticleImage } from '../lib/article-images';
+
+const postsEn = (await getCollection('insights', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const postsZh = (await getCollection('insightsZh', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const [featuredEn, ...restEn] = postsEn;
+const [featuredZh, ...restZh] = postsZh;
+
+const topicsEn = [
+  { href: '/services#seo', icon: '◎', title: 'Traditional SEO', desc: 'Rankings, technical health, and content on Google and Bing.', tone: 'blue' },
+  { href: '/services#geo', icon: '◈', title: 'GEO', desc: 'Being cited in AI-generated answers through clear, trustworthy content.', tone: 'violet' },
+  { href: '/services#ai-ranking', icon: '◇', title: 'AI discovery', desc: 'How brands show up in ChatGPT, Perplexity, and AI Overviews.', tone: 'teal' },
+  { href: '/services#local', icon: '◉', title: 'Hong Kong & GBA', desc: 'Local listings, bilingual content, and regional context.', tone: 'amber' },
+];
+
+const topicsZh = [
+  { href: '/services#seo', icon: '◎', title: '傳統 SEO', desc: 'Google 及 Bing 的排名、技術健康與內容。', tone: 'blue' },
+  { href: '/services#geo', icon: '◈', title: 'GEO', desc: '透過清晰可信的內容，在 AI 生成答案中被引用。', tone: 'violet' },
+  { href: '/services#ai-ranking', icon: '◇', title: 'AI 發現', desc: '品牌在 ChatGPT、Perplexity 及 AI Overview 中的呈現。', tone: 'teal' },
+  { href: '/services#local', icon: '◉', title: '香港及大灣區', desc: '本地商家資料、雙語內容及區域背景。', tone: 'amber' },
+];
+
+const statsEn = [
+  { value: '2 channels', label: 'Search results & AI answers' },
+  { value: '4 topics', label: 'Core areas covered' },
+  { value: 'HK + GBA', label: 'Regional focus' },
+];
+
+const statsZh = [
+  { value: '2 個渠道', label: '搜尋結果與 AI 答案' },
+  { value: '4 個主題', label: '核心涵蓋範圍' },
+  { value: '港 + 灣區', label: '區域重點' },
+];
+
+const stepsEn = [
+  { n: '01', title: 'Audit', desc: 'Review rankings, citations, and brand mentions.' },
+  { n: '02', title: 'Fix foundations', desc: 'Speed, crawlability, structured data, clarity.' },
+  { n: '03', title: 'Publish', desc: 'Guides, FAQs, and citable content.' },
+  { n: '04', title: 'Measure', desc: 'Track rankings and AI citation patterns.' },
+];
+
+const stepsZh = [
+  { n: '01', title: '審核', desc: '檢視排名、引用及品牌提及。' },
+  { n: '02', title: '修復基礎', desc: '速度、爬蟲、結構化數據、清晰度。' },
+  { n: '03', title: '發布內容', desc: '指南、FAQ 及可引用文章。' },
+  { n: '04', title: '量度', desc: '追蹤排名與 AI 引用模式。' },
+];
+
+const platforms = ['Google', 'AI Overviews', 'ChatGPT', 'Perplexity', 'Gemini', 'Copilot'];
+
+const faqsEn = [
+  { q: 'What is GEO?', a: 'GEO (generative engine optimization) is about making your content clear and trustworthy enough that AI tools may cite it in their answers — alongside traditional search rankings.' },
+  { q: 'How is it different from regular SEO?', a: 'SEO focuses on ranking in search results. GEO extends that toward AI-generated answers through structured content, authority signals, and formats that are easy to quote.' },
+  { q: 'Which platforms matter?', a: 'Google AI Overviews, ChatGPT, Perplexity, Gemini, and Copilot are the ones most businesses watch — but the principles overlap.' },
+  { q: 'Is this relevant in Hong Kong?', a: 'Yes. Local listings, bilingual content, and regional context all affect how a business shows up in search and AI answers.' },
+];
+
+const faqsZh = [
+  { q: '什麼是 GEO？', a: 'GEO（生成式引擎優化）旨在讓內容清晰、可信，使 AI 工具可能在回答時引用——同時配合傳統搜尋排名。' },
+  { q: '與一般 SEO 有什麼分別？', a: 'SEO 著重搜尋結果排名。GEO 則透過結構化內容、權威信號及易被引用的格式，延伸至 AI 生成答案。' },
+  { q: '哪些平台值得關注？', a: 'Google AI Overview、ChatGPT、Perplexity、Gemini 及 Copilot 是企業最常觀察的平台，但底層原則大致相通。' },
+  { q: '在香港是否適用？', a: '是。本地商家資料、雙語內容及區域背景，都會影響企業在搜尋與 AI 答案中的呈現。' },
+];
+---
+
+<BaseLayout title={SITE_META.en.name} description={SITE_META.en.description}>
+  <section class="home-hero">
+    <div class="container home-hero__grid">
+      <div class="home-hero__copy">
+        <div data-lang="en" class="lang-block is-visible">
+          <p class="home-hero__label">Independent reference · Hong Kong</p>
+          <h1>Search visibility in the age of AI answers</h1>
+          <p class="home-hero__lead">
+            Practical articles on how businesses get found through search engines and AI tools —
+            written for Hong Kong and Greater Bay Area readers.
+          </p>
+          <div class="home-hero__actions">
+            <a href="/insights" class="btn btn--primary">Browse articles</a>
+            <a href="/services" class="btn btn--secondary">View topics</a>
+          </div>
+        </div>
+        <div data-lang="zh" class="lang-block">
+          <p class="home-hero__label">獨立參考 · 香港</p>
+          <h1>AI 答案時代的搜尋可見度</h1>
+          <p class="home-hero__lead">
+            關於企業如何透過搜尋引擎與 AI 工具被找到的實務文章——
+            供香港及大灣區讀者閱讀。
+          </p>
+          <div class="home-hero__actions">
+            <a href="/insights" class="btn btn--primary">瀏覽文章</a>
+            <a href="/services" class="btn btn--secondary">查看主題</a>
+          </div>
+        </div>
+      </div>
+      <div class="home-hero__visual" aria-hidden="true">
+        <div class="hero-visual">
+          <div class="hero-visual__orb hero-visual__orb--1"></div>
+          <div class="hero-visual__orb hero-visual__orb--2"></div>
+          <div class="hero-visual__card hero-visual__card--search">
+            <span class="hero-visual__dot"></span>
+            <span>Search results</span>
+          </div>
+          <div class="hero-visual__card hero-visual__card--ai">
+            <span class="hero-visual__dot hero-visual__dot--ai"></span>
+            <span>AI answers</span>
+          </div>
+          <div class="hero-visual__line"></div>
+          <div class="hero-visual__center">
+            <span>Your brand</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div data-lang="en" class="lang-block is-visible stats-row">
+        {statsEn.map((s) => (
+          <div class="stat-card">
+            <strong>{s.value}</strong>
+            <span>{s.label}</span>
+          </div>
+        ))}
+      </div>
+      <div data-lang="zh" class="lang-block stats-row">
+        {statsZh.map((s) => (
+          <div class="stat-card">
+            <strong>{s.value}</strong>
+            <span>{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section home-section--topics">
+    <div class="container">
+      <div data-lang="en" class="lang-block is-visible section-head">
+        <p class="section-label">Explore</p>
+        <h2>Four areas worth understanding</h2>
+        <p class="section-desc">Start with the fundamentals, then layer on AI visibility and regional context.</p>
+      </div>
+      <div data-lang="zh" class="lang-block section-head">
+        <p class="section-label">探索</p>
+        <h2>四個值得了解的方向</h2>
+        <p class="section-desc">先掌握基礎，再疊加 AI 可見度與區域背景。</p>
+      </div>
+      <div data-lang="en" class="lang-block is-visible topic-grid">
+        {topicsEn.map((topic) => (
+          <a href={topic.href} class={`topic-card topic-card--${topic.tone}`}>
+            <span class="topic-card__icon">{topic.icon}</span>
+            <h3>{topic.title}</h3>
+            <p>{topic.desc}</p>
+            <span class="topic-card__link">Learn more →</span>
+          </a>
+        ))}
+      </div>
+      <div data-lang="zh" class="lang-block topic-grid">
+        {topicsZh.map((topic) => (
+          <a href={topic.href} class={`topic-card topic-card--${topic.tone}`}>
+            <span class="topic-card__icon">{topic.icon}</span>
+            <h3>{topic.title}</h3>
+            <p>{topic.desc}</p>
+            <span class="topic-card__link">了解更多 →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section home-section--compare">
+    <div class="container">
+      <div data-lang="en" class="lang-block is-visible section-head section-head--center">
+        <p class="section-label">The shift</p>
+        <h2>Two ways people discover businesses now</h2>
+      </div>
+      <div data-lang="zh" class="lang-block section-head section-head--center">
+        <p class="section-label">轉變</p>
+        <h2>人們現在有兩種方式找到商戶</h2>
+      </div>
+      <div data-lang="en" class="lang-block is-visible compare-grid">
+        <article class="compare-card compare-card--seo">
+          <p class="compare-card__tag">Traditional</p>
+          <h3>Search engine results</h3>
+          <p>Users type a query, scan ranked links, and click through to websites. Success means strong rankings, fast pages, and clear content.</p>
+          <ul>
+            <li>Google &amp; Bing rankings</li>
+            <li>Technical &amp; on-page health</li>
+            <li>Links and authority</li>
+          </ul>
+        </article>
+        <article class="compare-card compare-card--geo">
+          <p class="compare-card__tag">Emerging</p>
+          <h3>AI-generated answers</h3>
+          <p>Users ask AI tools a question and get a synthesized answer — often citing a handful of sources. Success means being quotable and trustworthy.</p>
+          <ul>
+            <li>ChatGPT &amp; Perplexity citations</li>
+            <li>Structured, citable content</li>
+            <li>E-E-A-T and authority signals</li>
+          </ul>
+        </article>
+      </div>
+      <div data-lang="zh" class="lang-block compare-grid">
+        <article class="compare-card compare-card--seo">
+          <p class="compare-card__tag">傳統</p>
+          <h3>搜尋引擎結果</h3>
+          <p>用戶輸入查詢、瀏覽排名連結並點擊進入網站。成功意味著良好排名、快速頁面及清晰內容。</p>
+          <ul>
+            <li>Google 及 Bing 排名</li>
+            <li>技術與頁面健康</li>
+            <li>連結與權威</li>
+          </ul>
+        </article>
+        <article class="compare-card compare-card--geo">
+          <p class="compare-card__tag">新興</p>
+          <h3>AI 生成答案</h3>
+          <p>用戶向 AI 工具提問並獲得綜合答案——通常引用少數來源。成功意味著內容可被引用且值得信任。</p>
+          <ul>
+            <li>ChatGPT 及 Perplexity 引用</li>
+            <li>結構化、可引用內容</li>
+            <li>E-E-A-T 與權威信號</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section home-section--process">
+    <div class="container">
+      <div data-lang="en" class="lang-block is-visible section-head">
+        <p class="section-label">Approach</p>
+        <h2>A typical visibility workflow</h2>
+        <p class="section-desc">Most teams follow a similar sequence — whether the goal is rankings or AI citations.</p>
+      </div>
+      <div data-lang="zh" class="lang-block section-head">
+        <p class="section-label">做法</p>
+        <h2>常見的可見度工作流程</h2>
+        <p class="section-desc">不論目標是排名或 AI 引用，多數團隊都會依循類似順序。</p>
+      </div>
+      <div data-lang="en" class="lang-block is-visible process-track">
+        {stepsEn.map((step) => (
+          <div class="process-step">
+            <span class="process-step__n">{step.n}</span>
+            <h3>{step.title}</h3>
+            <p>{step.desc}</p>
+          </div>
+        ))}
+      </div>
+      <div data-lang="zh" class="lang-block process-track">
+        {stepsZh.map((step) => (
+          <div class="process-step">
+            <span class="process-step__n">{step.n}</span>
+            <h3>{step.title}</h3>
+            <p>{step.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section home-section--articles">
+    <div class="container">
+      <div data-lang="en" class="lang-block is-visible section-head section-head--split">
+        <div>
+          <p class="section-label">Articles</p>
+          <h2>Latest from the guide</h2>
+        </div>
+        <a href="/insights" class="btn btn--secondary">All articles</a>
+      </div>
+      <div data-lang="zh" class="lang-block section-head section-head--split">
+        <div>
+          <p class="section-label">文章</p>
+          <h2>指南最新文章</h2>
+        </div>
+        <a href="/insights" class="btn btn--secondary">全部文章</a>
+      </div>
+
+      {featuredEn && (
+        <div data-lang="en" class="lang-block is-visible article-showcase">
+          <a href={`/insights/${featuredEn.id}`} class="article-feature">
+            <div class="article-thumb article-thumb--feature">
+              <img src={getArticleImage(featuredEn.id)} alt="" width="900" height="500" loading="lazy" />
+            </div>
+            <div class="article-feature__body">
+              <div class="article-feature__meta">
+                <time datetime={featuredEn.data.pubDate.toISOString()}>
+                  {featuredEn.data.pubDate.toLocaleDateString('en-HK', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+                {featuredEn.data.tags.slice(0, 2).map((tag) => <span class="tag">{tag}</span>)}
+              </div>
+              <h3>{featuredEn.data.title}</h3>
+              <p>{featuredEn.data.description}</p>
+              <span class="text-link">Read article →</span>
+            </div>
+          </a>
+          <div class="article-grid">
+            {restEn.slice(0, 3).map((post) => (
+              <a href={`/insights/${post.id}`} class="article-card">
+                <div class="article-thumb">
+                  <img src={getArticleImage(post.id)} alt="" width="600" height="340" loading="lazy" />
+                </div>
+                <div class="article-card__body">
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {post.data.pubDate.toLocaleDateString('en-HK', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </time>
+                  <h3>{post.data.title}</h3>
+                  <p>{post.data.description}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {featuredZh && (
+        <div data-lang="zh" class="lang-block article-showcase">
+          <a href={`/insights/${featuredZh.id}`} class="article-feature">
+            <div class="article-thumb article-thumb--feature">
+              <img src={getArticleImage(featuredZh.id)} alt="" width="900" height="500" loading="lazy" />
+            </div>
+            <div class="article-feature__body">
+              <div class="article-feature__meta">
+                <time datetime={featuredZh.data.pubDate.toISOString()}>
+                  {featuredZh.data.pubDate.toLocaleDateString('zh-HK', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+                {featuredZh.data.tags.slice(0, 2).map((tag) => <span class="tag">{tag}</span>)}
+              </div>
+              <h3>{featuredZh.data.title}</h3>
+              <p>{featuredZh.data.description}</p>
+              <span class="text-link">閱讀全文 →</span>
+            </div>
+          </a>
+          <div class="article-grid">
+            {restZh.slice(0, 3).map((post) => (
+              <a href={`/insights/${post.id}`} class="article-card">
+                <div class="article-thumb">
+                  <img src={getArticleImage(post.id)} alt="" width="600" height="340" loading="lazy" />
+                </div>
+                <div class="article-card__body">
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {post.data.pubDate.toLocaleDateString('zh-HK', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </time>
+                  <h3>{post.data.title}</h3>
+                  <p>{post.data.description}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="home-section home-section--platforms">
+    <div class="container">
+      <div data-lang="en" class="lang-block is-visible section-head section-head--center">
+        <p class="section-label">Platforms</p>
+        <h2>Where visibility is measured</h2>
+        <p class="section-desc">Businesses commonly track presence across these tools.</p>
+      </div>
+      <div data-lang="zh" class="lang-block section-head section-head--center">
+        <p class="section-label">平台</p>
+        <h2>可見度常見觀察平台</h2>
+        <p class="section-desc">企業通常會追蹤在以下工具中的呈現。</p>
+      </div>
+      <div class="platform-strip">
+        {platforms.map((name) => <span class="platform-pill">{name}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section home-section--faq">
+    <div class="container">
+      <div data-lang="en" class="lang-block is-visible section-head">
+        <p class="section-label">Q&amp;A</p>
+        <h2>Common questions</h2>
+      </div>
+      <div data-lang="zh" class="lang-block section-head">
+        <p class="section-label">問答</p>
+        <h2>常見問題</h2>
+      </div>
+      <div data-lang="en" class="lang-block is-visible faq-grid">
+        {faqsEn.map((faq) => (
+          <details class="faq-details">
+            <summary>{faq.q}</summary>
+            <p>{faq.a}</p>
+          </details>
+        ))}
+      </div>
+      <div data-lang="zh" class="lang-block faq-grid">
+        {faqsZh.map((faq) => (
+          <details class="faq-details">
+            <summary>{faq.q}</summary>
+            <p>{faq.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-cta">
+    <div class="container home-cta__inner">
+      <div data-lang="en" class="lang-block is-visible">
+        <h2>Start reading the guide</h2>
+        <p>In-depth articles on search visibility, GEO, and AI answers — updated for Hong Kong readers.</p>
+        <div class="home-cta__actions">
+          <a href="/insights" class="btn btn--primary btn--light">Browse articles</a>
+          <a href="/about" class="btn btn--ghost-light">About this guide</a>
+        </div>
+      </div>
+      <div data-lang="zh" class="lang-block">
+        <h2>開始閱讀指南</h2>
+        <p>關於搜尋可見度、GEO 及 AI 答案的深度文章——為香港讀者更新。</p>
+        <div class="home-cta__actions">
+          <a href="/insights" class="btn btn--primary btn--light">瀏覽文章</a>
+          <a href="/about" class="btn btn--ghost-light">關於本指南</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

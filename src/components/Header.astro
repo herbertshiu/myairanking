@@ -1,0 +1,29 @@
+---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { SITE_META } from '../i18n/locales';
+import { NAV_LINKS } from '../i18n/ui';
+
+const links = NAV_LINKS.en.map((en, i) => ({
+  href: en.href,
+  en: en.label,
+  zh: NAV_LINKS.zh[i].label,
+}));
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="/" class="site-header__logo">
+      <span data-lang="en" class="lang-block is-visible">{SITE_META.en.shortName}</span>
+      <span data-lang="zh" class="lang-block">{SITE_META.zh.shortName}</span>
+    </a>
+    <nav class="site-header__nav" aria-label="Main">
+      {links.map((link) => (
+        <>
+          <a href={link.href} data-lang="en" class="lang-block is-visible">{link.en}</a>
+          <a href={link.href} data-lang="zh" class="lang-block">{link.zh}</a>
+        </>
+      ))}
+    </nav>
+    <LanguageSwitcher />
+  </div>
+</header>

@@ -1,0 +1,38 @@
+---
+import { SITE_META } from '../i18n/locales';
+import { NAV_LINKS } from '../i18n/ui';
+
+const year = new Date().getFullYear();
+const links = NAV_LINKS.en.map((en, i) => ({
+  href: en.href,
+  en: en.label,
+  zh: NAV_LINKS.zh[i].label,
+}));
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <a href="/">
+        <span data-lang="en" class="lang-block is-visible">{SITE_META.en.name}</span>
+        <span data-lang="zh" class="lang-block">{SITE_META.zh.name}</span>
+      </a>
+      <p data-lang="en" class="lang-block is-visible">{SITE_META.en.description}</p>
+      <p data-lang="zh" class="lang-block">{SITE_META.zh.description}</p>
+    </div>
+    <nav class="site-footer__nav" aria-label="Footer">
+      {links.map((link) => (
+        <>
+          <a href={link.href} data-lang="en" class="lang-block is-visible">{link.en}</a>
+          <a href={link.href} data-lang="zh" class="lang-block">{link.zh}</a>
+        </>
+      ))}
+    </nav>
+  </div>
+  <div class="container site-footer__bottom">
+    <p>
+      <span data-lang="en" class="lang-block is-visible">© {year} {SITE_META.en.name}</span>
+      <span data-lang="zh" class="lang-block">© {year} {SITE_META.zh.name}</span>
+    </p>
+  </div>
+</footer>

@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getArticleImage } from '../../lib/article-images';
+
+const postsEn = (await getCollection('insights', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const postsZh = (await getCollection('insightsZh', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+---
+
+<BaseLayout
+  title="Articles"
+  description="Reference articles on search visibility, GEO, and AI-generated answers."
+>
+  <section class="page-hero">
+    <div class="container">
+      <div data-lang="en" class="lang-block is-visible">
+        <h1>Articles</h1>
+        <p>Practical guides on search visibility and AI-generated answers.</p>
+      </div>
+      <div data-lang="zh" class="lang-block">
+        <h1>文章</h1>
+        <p>關於搜尋可見度與 AI 生成答案的實務指南。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-content">
+    <div class="container">
+      <div class="insights-grid">
+        {postsEn.map((post) => (
+          <a href={`/insights/${post.id}`} data-lang="en" class="insight-card lang-block is-visible">
+            <div class="article-thumb">
+              <img src={getArticleImage(post.id)} alt="" width="600" height="340" loading="lazy" />
+            </div>
+            <div class="insight-card__body">
+              <div class="insight-meta">
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString('en-HK', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+                {post.data.tags.slice(0, 2).map((tag) => <span class="insight-tag">{tag}</span>)}
+              </div>
+              <h2>{post.data.title}</h2>
+              <p>{post.data.description}</p>
+              <span class="insight-read">Read article →</span>
+            </div>
+          </a>
+        ))}
+        {postsZh.map((post) => (
+          <a href={`/insights/${post.id}`} data-lang="zh" class="insight-card lang-block">
+            <div class="article-thumb">
+              <img src={getArticleImage(post.id)} alt="" width="600" height="340" loading="lazy" />
+            </div>
+            <div class="insight-card__body">
+              <div class="insight-meta">
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString('zh-HK', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+                {post.data.tags.slice(0, 2).map((tag) => <span class="insight-tag">{tag}</span>)}
+              </div>
+              <h2>{post.data.title}</h2>
+              <p>{post.data.description}</p>
+              <span class="insight-read">閱讀全文 →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

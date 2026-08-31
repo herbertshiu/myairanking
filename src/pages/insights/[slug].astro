@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCTA from '../../components/ArticleCTA.astro';
+import { getCollection, render } from 'astro:content';
+import { buildArticleSEO } from '../../lib/seo';
+
+export async function getStaticPaths() {
+  const enPosts = await getCollection('insights', ({ data }) => !data.draft);
+  const zhPosts = await getCollection('insightsZh', ({ data }) => !data.draft);
+  const slugs = new Set([
+    ...enPosts.map((p) => p.id),
+    ...zhPosts.map((p) => p.id),
+  ]);
+  return [...slugs].map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const enPosts = await getCollection('insights', ({ data }) => !data.draft);
+const zhPosts = await getCollection('insightsZh', ({ data }) => !data.draft);
+
+const enPost = enPosts.find((p) => p.id === slug)
+  ?? enPosts.find((p) => p.data.alternateSlug === slug);
+const zhPost = zhPosts.find((p) => p.id === slug)
+  ?? zhPosts.find((p) => p.data.alternateSlug === slug);
+
+const primary = enPost ?? zhPost;
+if (!primary) return Astro.redirect('/insights');
+
+const enRendered = enPost ? await render(enPost) : null;
+const zhRendered = zhPost ? await render(zhPost) : null;
+const seoPost = enPost ?? zhPost!;
+const seo = buildArticleSEO(seoPost);
+---
+
+<BaseLayout
+  {...seo}
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Articles', href: '/insights' },
+    { label: seoPost.data.title },
+  ]}
+>
+  <article>
+    {enPost && enRendered && (
+      <div data-lang="en" class="lang-block is-visible">
+        <header class="article-header container">
+          <div class="insight-meta" style="margin-bottom: 1rem;">
+            <time datetime={enPost.data.pubDate.toISOString()}>
+              {enPost.data.pubDate.toLocaleDateString('en-HK', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+            {enPost.data.tags.map((tag) => <span class="insight-tag">{tag}</span>)}
+          </div>
+          <h1>{enPost.data.title}</h1>
+          <div class="article-meta">
+            <span>By {enPost.data.author}</span>
+          </div>
+          <p style="color: var(--muted); font-size: 1.05rem;">{enPost.data.description}</p>
+        </header>
+        <div class="article-content container">
+          <enRendered.Content />
+          <ArticleCTA />
+        </div>
+      </div>
+    )}
+    {zhPost && zhRendered && (
+      <div data-lang="zh" class="lang-block">
+        <header class="article-header container">
+          <div class="insight-meta" style="margin-bottom: 1rem;">
+            <time datetime={zhPost.data.pubDate.toISOString()}>
+              {zhPost.data.pubDate.toLocaleDateString('zh-HK', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+            {zhPost.data.tags.map((tag) => <span class="insight-tag">{tag}</span>)}
+          </div>
+          <h1>{zhPost.data.title}</h1>
+          <div class="article-meta">
+            <span>作者 {zhPost.data.author}</span>
+          </div>
+          <p style="color: var(--muted); font-size: 1.05rem;">{zhPost.data.description}</p>
+        </header>
+        <div class="article-content container">
+          <zhRendered.Content />
+          <ArticleCTA />
+        </div>
+      </div>
+    )}
+  </article>
+</BaseLayout>

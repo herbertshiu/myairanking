@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contact"
+  description="General enquiries about topics covered in this guide."
+>
+  <section class="page-hero">
+    <div class="container">
+      <div data-lang="en" class="lang-block is-visible">
+        <h1>Contact</h1>
+        <p>General enquiries about topics covered in this guide.</p>
+      </div>
+      <div data-lang="zh" class="lang-block">
+        <h1>聯絡</h1>
+        <p>有關本指南主題的一般查詢。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-content">
+    <div class="container content-narrow">
+      <div class="contact-panel">
+        <div data-lang="en" class="lang-block is-visible">
+          <p>For questions about articles or topics in this guide, leave a message below. This is an independent editorial site — not affiliated with any agency or vendor.</p>
+          <div class="contact-detail"><strong>Region</strong>Hong Kong &amp; Greater Bay Area</div>
+        </div>
+        <div data-lang="zh" class="lang-block">
+          <p>如對本指南文章或主題有查詢，請在下方留言。本網站為獨立編輯指南，不隸屬於任何代理或供應商。</p>
+          <div class="contact-detail"><strong>地區</strong>香港及大灣區</div>
+        </div>
+        <form class="contact-form" action="#" method="post">
+          <div class="form-group">
+            <label for="name" data-lang="en" class="lang-block is-visible">Name</label>
+            <label for="name" data-lang="zh" class="lang-block">姓名</label>
+            <input type="text" id="name" name="name" required autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label for="email" data-lang="en" class="lang-block is-visible">Your email</label>
+            <label for="email" data-lang="zh" class="lang-block">你的電郵</label>
+            <input type="email" id="email" name="email" required autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label for="message" data-lang="en" class="lang-block is-visible">Message</label>
+            <label for="message" data-lang="zh" class="lang-block">留言</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" data-lang="en" class="btn btn--primary lang-block is-visible">Send enquiry</button>
+          <button type="submit" data-lang="zh" class="btn btn--primary lang-block">送出查詢</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
