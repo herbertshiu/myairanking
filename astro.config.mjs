@@ -9,11 +9,4 @@ export default defineConfig({
   site,
   integrations: [sitemap()],
   compressHTML: true,
-  redirects: {
-    '/zh': '/',
-    '/zh/services': '/services',
-    '/zh/about': '/about',
-    '/zh/contact': '/contact',
-    '/zh/insights': '/insights',
-  },
 });

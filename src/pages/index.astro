@@ -3,6 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE_META } from '../i18n/locales';
 import { getCollection } from 'astro:content';
 import { getArticleImage } from '../lib/article-images';
+import { isChinesePath, localizedPath } from '../i18n/paths';
+
+const routeLocale = isChinesePath(Astro.url.pathname, Astro.url.searchParams) ? 'zh' : 'en';
 
 const postsEn = (await getCollection('insights', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -21,10 +24,10 @@ const topicsEn = [
 ];
 
 const topicsZh = [
-  { href: '/services#seo', icon: '◎', title: '傳統 SEO', desc: 'Google 及 Bing 的排名、技術健康與內容。', tone: 'blue' },
-  { href: '/services#geo', icon: '◈', title: 'GEO', desc: '透過清晰可信的內容，在 AI 生成答案中被引用。', tone: 'violet' },
-  { href: '/services#ai-ranking', icon: '◇', title: 'AI 發現', desc: '品牌在 ChatGPT、Perplexity 及 AI Overview 中的呈現。', tone: 'teal' },
-  { href: '/services#local', icon: '◉', title: '香港及大灣區', desc: '本地商家資料、雙語內容及區域背景。', tone: 'amber' },
+  { href: localizedPath(routeLocale, '/services#seo'), icon: '◎', title: '傳統 SEO', desc: 'Google 及 Bing 的排名、技術健康與內容。', tone: 'blue' },
+  { href: localizedPath(routeLocale, '/services#geo'), icon: '◈', title: 'GEO', desc: '透過清晰可信的內容，在 AI 生成答案中被引用。', tone: 'violet' },
+  { href: localizedPath(routeLocale, '/services#ai-ranking'), icon: '◇', title: 'AI 發現', desc: '品牌在 ChatGPT、Perplexity 及 AI Overview 中的呈現。', tone: 'teal' },
+  { href: localizedPath(routeLocale, '/services#local'), icon: '◉', title: '香港及大灣區', desc: '本地商家資料、雙語內容及區域背景。', tone: 'amber' },
 ];
 
 const statsEn = [
@@ -94,8 +97,8 @@ const faqsZh = [
             供香港及大灣區讀者閱讀。
           </p>
           <div class="home-hero__actions">
-            <a href="/insights" class="btn btn--primary">瀏覽文章</a>
-            <a href="/services" class="btn btn--secondary">查看主題</a>
+            <a href={localizedPath(routeLocale, '/insights')} class="btn btn--primary">瀏覽文章</a>
+            <a href={localizedPath(routeLocale, '/services')} class="btn btn--secondary">查看主題</a>
           </div>
         </div>
       </div>
@@ -277,7 +280,7 @@ const faqsZh = [
           <p class="section-label">文章</p>
           <h2>指南最新文章</h2>
         </div>
-        <a href="/insights" class="btn btn--secondary">全部文章</a>
+        <a href={localizedPath(routeLocale, '/insights')} class="btn btn--secondary">全部文章</a>
       </div>
 
       {featuredEn && (
@@ -319,7 +322,7 @@ const faqsZh = [
 
       {featuredZh && (
         <div data-lang="zh" class="lang-block article-showcase">
-          <a href={`/insights/${featuredZh.id}`} class="article-feature">
+          <a href={localizedPath('zh', `/insights/${featuredZh.id}`)} class="article-feature">
             <div class="article-thumb article-thumb--feature">
               <img src={getArticleImage(featuredZh.id)} alt="" width="900" height="500" loading="lazy" />
             </div>
@@ -337,7 +340,7 @@ const faqsZh = [
           </a>
           <div class="article-grid">
             {restZh.slice(0, 3).map((post) => (
-              <a href={`/insights/${post.id}`} class="article-card">
+              <a href={localizedPath('zh', `/insights/${post.id}`)} class="article-card">
                 <div class="article-thumb">
                   <img src={getArticleImage(post.id)} alt="" width="600" height="340" loading="lazy" />
                 </div>
@@ -417,8 +420,8 @@ const faqsZh = [
         <h2>開始閱讀指南</h2>
         <p>關於搜尋可見度、GEO 及 AI 答案的深度文章——為香港讀者更新。</p>
         <div class="home-cta__actions">
-          <a href="/insights" class="btn btn--primary btn--light">瀏覽文章</a>
-          <a href="/about" class="btn btn--ghost-light">關於本指南</a>
+          <a href={localizedPath(routeLocale, '/insights')} class="btn btn--primary btn--light">瀏覽文章</a>
+          <a href={localizedPath(routeLocale, '/about')} class="btn btn--ghost-light">關於本指南</a>
         </div>
       </div>
     </div>

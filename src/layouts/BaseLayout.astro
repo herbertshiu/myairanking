@@ -7,12 +7,16 @@ import SEO from '../components/SEO.astro';
 import type { SEOProps } from '../lib/seo';
 import langToggle from '../scripts/lang-toggle.ts?url';
 import { resolveCanonical, resolveSiteOrigin } from '../lib/site-url';
+import type { Locale } from '../i18n/locales';
+import { isChinesePath } from '../i18n/paths';
 
 interface Props extends SEOProps {
   breadcrumbs?: { label: string; href?: string }[];
+  locale?: Locale;
 }
 
-const { breadcrumbs, ...seo } = Astro.props;
+const { breadcrumbs, locale, ...seo } = Astro.props;
+const pageLocale: Locale = locale ?? (isChinesePath(Astro.url.pathname, Astro.url.searchParams) ? 'zh' : 'en');
 const site = SITE_META.en;
 const siteOrigin = resolveSiteOrigin(Astro.site, Astro.url);
 const canonical = resolveCanonical(Astro.site, Astro.url);
@@ -23,7 +27,7 @@ const fullTitle =
 ---
 
 <!doctype html>
-<html lang="en-HK">
+<html lang={pageLocale === 'zh' ? 'zh-HK' : 'en-HK'} data-default-lang={pageLocale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,7 +39,12 @@ const fullTitle =
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=DM+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <SEO {...seo} title={fullTitle} locale="en" alternateUrl={`${siteOrigin}${Astro.url.pathname}?lang=zh`} />
+    <SEO
+      {...seo}
+      title={fullTitle}
+      locale={pageLocale}
+      alternateUrl={`${siteOrigin}${pageLocale === 'zh' ? (Astro.url.pathname.replace(/^\/zh/, '') || '/') : `/zh${Astro.url.pathname === '/' ? '' : Astro.url.pathname}`}`}
+    />
     <slot name="head" />
   </head>
   <body>

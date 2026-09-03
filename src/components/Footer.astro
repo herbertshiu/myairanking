@@ -4,7 +4,8 @@ import { NAV_LINKS } from '../i18n/ui';
 
 const year = new Date().getFullYear();
 const links = NAV_LINKS.en.map((en, i) => ({
-  href: en.href,
+  enHref: en.href,
+  zhHref: `/zh${en.href}`,
   en: en.label,
   zh: NAV_LINKS.zh[i].label,
 }));
@@ -23,8 +24,8 @@ const links = NAV_LINKS.en.map((en, i) => ({
     <nav class="site-footer__nav" aria-label="Footer">
       {links.map((link) => (
         <>
-          <a href={link.href} data-lang="en" class="lang-block is-visible">{link.en}</a>
-          <a href={link.href} data-lang="zh" class="lang-block">{link.zh}</a>
+          <a href={link.enHref} data-lang="en" class="lang-block is-visible">{link.en}</a>
+          <a href={link.zhHref} data-lang="zh" class="lang-block">{link.zh}</a>
         </>
       ))}
     </nav>
