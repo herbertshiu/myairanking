@@ -39,6 +39,11 @@ const seo = buildArticleSEO(seoPost);
     { label: 'Articles', href: '/insights' },
     { label: seoPost.data.title },
   ]}
+  breadcrumbsZh={[
+    { label: '首頁', href: '/zh' },
+    { label: '文章', href: '/zh/insights' },
+    { label: seoPost.data.title },
+  ]}
 >
   <article>
     {enPost && enRendered && (

@@ -5,17 +5,17 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SEO from '../components/SEO.astro';
 import type { SEOProps } from '../lib/seo';
-import langToggle from '../scripts/lang-toggle.ts?url';
 import { resolveCanonical, resolveSiteOrigin } from '../lib/site-url';
 import type { Locale } from '../i18n/locales';
 import { isChinesePath } from '../i18n/paths';
 
 interface Props extends SEOProps {
   breadcrumbs?: { label: string; href?: string }[];
+  breadcrumbsZh?: { label: string; href?: string }[];
   locale?: Locale;
 }
 
-const { breadcrumbs, locale, ...seo } = Astro.props;
+const { breadcrumbs, breadcrumbsZh, locale, ...seo } = Astro.props;
 const pageLocale: Locale = locale ?? (isChinesePath(Astro.url.pathname, Astro.url.searchParams) ? 'zh' : 'en');
 const site = SITE_META.en;
 const siteOrigin = resolveSiteOrigin(Astro.site, Astro.url);
@@ -52,15 +52,22 @@ const fullTitle =
     <a href="#main-content" class="skip-link lang-block" data-lang="zh">跳至主要內容</a>
     <Header />
     {breadcrumbs && breadcrumbs.length > 0 && (
-      <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <nav class="breadcrumbs container lang-block is-visible" data-lang="en" aria-label="Breadcrumb">
         <ol>
           {breadcrumbs.map((crumb) => (
             <li>
-              {crumb.href ? (
-                <a href={crumb.href}>{crumb.label}</a>
-              ) : (
-                <span aria-current="page">{crumb.label}</span>
-              )}
+              {crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span aria-current="page">{crumb.label}</span>}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+    {breadcrumbsZh && breadcrumbsZh.length > 0 && (
+      <nav class="breadcrumbs container lang-block" data-lang="zh" aria-label="麵包屑導航">
+        <ol>
+          {breadcrumbsZh.map((crumb) => (
+            <li>
+              {crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span aria-current="page">{crumb.label}</span>}
             </li>
           ))}
         </ol>
@@ -70,6 +77,6 @@ const fullTitle =
       <slot />
     </main>
     <Footer />
-    <script type="module" src={langToggle}></script>
+    <script type="module" src="/scripts/lang-toggle.js"></script>
   </body>
 </html>

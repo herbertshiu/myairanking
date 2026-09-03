@@ -1,6 +1,4 @@
 ---
-import { isChinesePath, localizedPath } from '../i18n/paths';
-const locale = isChinesePath(Astro.url.pathname, Astro.url.searchParams) ? 'zh' : 'en';
 ---
 
 <aside class="article-cta">
@@ -13,9 +11,9 @@ const locale = isChinesePath(Astro.url.pathname, Astro.url.searchParams) ? 'zh' 
     本指南說明常見做法。如對所涵蓋主題有一般查詢，可使用聯絡表格。
   </p>
   <div class="article-cta-actions">
-    <a href={localizedPath(locale, '/contact')} data-lang="en" class="btn btn--primary lang-block is-visible">General enquiry</a>
-    <a href={localizedPath(locale, '/contact')} data-lang="zh" class="btn btn--primary lang-block">一般查詢</a>
-    <a href={localizedPath(locale, '/services')} data-lang="en" class="btn btn--outline lang-block is-visible">Topic overview</a>
-    <a href={localizedPath(locale, '/services')} data-lang="zh" class="btn btn--outline lang-block">主題概覽</a>
+    <a href="/contact" data-lang="en" class="btn btn--primary lang-block is-visible">General enquiry</a>
+    <a href="/zh/contact" data-lang="zh" class="btn btn--primary lang-block">一般查詢</a>
+    <a href="/services" data-lang="en" class="btn btn--outline lang-block is-visible">Topic overview</a>
+    <a href="/zh/services" data-lang="zh" class="btn btn--outline lang-block">主題概覽</a>
   </div>
 </aside>
