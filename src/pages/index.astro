@@ -3,9 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE_META } from '../i18n/locales';
 import { getCollection } from 'astro:content';
 import { getArticleImage } from '../lib/article-images';
-import { isChinesePath, localizedPath } from '../i18n/paths';
+import { localizedPath } from '../i18n/paths';
 
-const routeLocale = isChinesePath(Astro.url.pathname, Astro.url.searchParams) ? 'zh' : 'en';
+const routeLocale = 'zh';
 
 const postsEn = (await getCollection('insights', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
