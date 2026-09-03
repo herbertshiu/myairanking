@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const zhPosts = await getCollection('insightsZh', ({ data }) => !data.draft);
+  const paths = new Set([
+    '',
+    'about',
+    'services',
+    'contact',
+    'insights',
+    ...zhPosts.map((post) => `insights/${post.id}`),
+  ]);
+  return [...paths].map((slug) => ({ params: { slug: slug || undefined } }));
+}
+
+const path = Astro.params.slug ? `/${Astro.params.slug}` : '/';
+return Astro.rewrite(`${path}${path.includes('?') ? '&' : '?'}lang=zh`);
+---
